@@ -1,1 +1,270 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>God Mind</title>
+<style>
+:root{
+  --bg:#000;--surface:#0b0b0c;--line:rgba(255,255,255,.08);
+  --text:#f5f5f7;--muted:#86868b;--gold:#c9a96e;--ease:cubic-bezier(.25,.1,.25,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Inter,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:56px 24px 140px}
 
+/* header */
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:88px}
+.mark{font-size:12px;font-weight:500;letter-spacing:.42em;text-transform:uppercase}
+.mark b{color:var(--gold);font-weight:500}
+.tag{font-size:12px;color:var(--muted);letter-spacing:.06em}
+
+/* hero */
+h1{font-size:clamp(44px,7.5vw,88px);font-weight:200;letter-spacing:-.035em;line-height:1.02}
+h1 span{color:var(--muted)}
+.lede{margin-top:20px;color:var(--muted);font-size:17px;font-weight:300;max-width:520px;line-height:1.5}
+
+.search{margin-top:56px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:14px;transition:border-color .4s var(--ease)}
+.search:focus-within{border-color:var(--gold)}
+.search input{flex:1;background:none;border:0;outline:none;color:var(--text);font-size:22px;font-weight:300;font-family:inherit;letter-spacing:-.01em}
+.search input::placeholder{color:#3a3a3d}
+.btn{background:var(--text);color:var(--bg);border:0;cursor:pointer;padding:12px 22px;border-radius:999px;font-family:inherit;font-size:14px;font-weight:500;line-height:1;transition:opacity .3s,transform .3s var(--ease)}
+.btn:hover{opacity:.85}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.3;cursor:default}
+.opts{margin-top:18px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.opts select{background:none;border:1px solid var(--line);color:var(--text);padding:6px 10px;border-radius:8px;font-family:inherit;font-size:13px;outline:none}
+
+.status{margin-top:40px;color:var(--muted);font-size:14px;min-height:20px}
+.error{color:#ff7a6b}
+
+/* results */
+.results{margin-top:96px;display:none;animation:rise .8s var(--ease)}
+.results.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.section-label{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+
+.profile{display:flex;align-items:center;gap:24px;margin-bottom:72px}
+.avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;background:var(--surface);border:1px solid var(--line)}
+.profile h2{font-size:34px;font-weight:300;letter-spacing:-.02em}
+.profile .handle{color:var(--muted);font-size:15px;margin-top:4px}
+.profile .bio{color:#a1a1a6;font-size:14px;margin-top:10px;max-width:460px;line-height:1.5}
+.pstats{margin-left:auto;display:flex;gap:44px}
+.pstats div{text-align:right}
+.pstats strong{display:block;font-size:26px;font-weight:300;letter-spacing:-.02em}
+.pstats small{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+/* top post */
+.top{display:grid;grid-template-columns:320px 1fr;gap:56px;background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:32px;margin-bottom:72px}
+.top img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:18px;background:#111}
+.top .label{color:var(--gold);font-size:12px;letter-spacing:.32em;text-transform:uppercase;margin-bottom:18px}
+.top h3{font-size:26px;font-weight:300;line-height:1.3;letter-spacing:-.01em;margin-bottom:12px}
+.top .meta{color:var(--muted);font-size:14px;margin-bottom:40px}
+.top a{color:var(--text);font-size:14px;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:3px}
+.top a:hover{border-color:var(--gold)}
+
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:18px;overflow:hidden}
+.metric{background:var(--bg);padding:26px 24px}
+.metric label{display:block;font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:10px}
+.metric strong{font-size:34px;font-weight:200;letter-spacing:-.03em}
+.metric.na strong{color:#3a3a3d;font-size:22px}
+
+/* list */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-weight:400;font-size:12px;color:var(--muted);letter-spacing:.04em;padding:0 16px 14px}
+td{padding:16px;border-top:1px solid var(--line);font-size:14px;vertical-align:middle;font-variant-numeric:tabular-nums}
+td.num{text-align:right;color:#d2d2d7;font-weight:300}
+th.num{text-align:right}
+tr{transition:background .3s}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+.thumb{width:44px;height:58px;border-radius:8px;object-fit:cover;background:#111;display:block}
+.vtitle{max-width:340px;color:var(--text);line-height:1.35}
+.bar{height:2px;background:var(--gold);margin-top:8px;border-radius:2px;opacity:.7}
+
+footer{margin-top:120px;font-size:12px;color:#48484a;line-height:1.6;max-width:640px}
+
+@media (max-width:820px){
+  .top{grid-template-columns:1fr}
+  .top img{max-width:260px}
+  .pstats{margin-left:0;gap:28px;flex-wrap:wrap}
+  .profile{flex-wrap:wrap}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .hide-sm{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="mark"><b>●</b>&nbsp; God Mind</div>
+    <div class="tag">Análise pública</div>
+  </header>
+
+  <h1>Cole o perfil.<br><span>Veja o que funciona.</span></h1>
+  <p class="lede">Encontramos o conteúdo mais viral de qualquer conta do TikTok e reunimos todas as métricas públicas disponíveis.</p>
+
+  <div class="search">
+    <input id="url" type="text" placeholder="tiktok.com/@usuario" autocomplete="off" spellcheck="false">
+    <button id="go" class="btn">Analisar</button>
+  </div>
+  <div class="opts">
+    Vídeos analisados
+    <select id="limit">
+      <option value="10">10</option>
+      <option value="30" selected>30</option>
+      <option value="60">60</option>
+    </select>
+  </div>
+  <div id="status" class="status"></div>
+
+  <section id="results" class="results">
+
+    <div class="profile" id="profile"></div>
+
+    <div class="section-label">Post mais viral</div>
+    <div class="top" id="top"></div>
+
+    <div class="section-label">Médias e totais</div>
+    <div class="metrics" id="totals" style="margin-bottom:72px"></div>
+
+    <div class="section-label">Todos os vídeos</div>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Vídeo</th>
+          <th class="num">Views</th>
+          <th class="num">Curtidas</th>
+          <th class="num hide-sm">Comentários</th>
+          <th class="num hide-sm">Saves</th>
+          <th class="num hide-sm">Shares</th>
+          <th class="num">Engajamento</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    Usa apenas dados públicos exibidos pelo TikTok. Algumas métricas, como saves, nem sempre são públicas e aparecem como “—”.
+  </footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => n == null ? "—" : new Intl.NumberFormat("pt-BR", {notation:"compact", maximumFractionDigits:1}).format(n);
+const pct = n => n == null ? "—" : n.toFixed(2).replace(".", ",") + "%";
+const fmtDate = s => s ? `${s.slice(6,8)}/${s.slice(4,6)}/${s.slice(0,4)}` : "";
+
+async function analyze() {
+  const url = $("url").value.trim();
+  if (!url) return;
+  const limit = $("limit").value;
+  $("go").disabled = true;
+  $("results").classList.remove("on");
+  $("status").className = "status";
+  $("status").textContent = "Analisando perfil…";
+
+  try {
+    const r = await fetch(`/api/analyze?url=${encodeURIComponent(url)}&limit=${limit}`);
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "Erro desconhecido");
+    render(d);
+    $("status").textContent = `${d.analyzed} vídeos analisados`;
+  } catch (e) {
+    $("status").className = "status error";
+    $("status").textContent = e.message;
+  } finally {
+    $("go").disabled = false;
+  }
+}
+
+function render(d) {
+  const p = d.profile || {};
+  $("profile").innerHTML = `
+    ${p.avatar ? `<img class="avatar" src="${esc(p.avatar)}" alt="">` : `<div class="avatar"></div>`}
+    <div>
+      <h2>${esc(p.nickname || p.username)}${p.verified ? " ✓" : ""}</h2>
+      <div class="handle">@${esc(p.username)}</div>
+      ${p.bio ? `<div class="bio">${esc(p.bio)}</div>` : ""}
+    </div>
+    <div class="pstats">
+      <div><strong>${fmt(p.followers)}</strong><small>Seguidores</small></div>
+      <div><strong>${fmt(p.total_likes)}</strong><small>Curtidas totais</small></div>
+      <div><strong>${fmt(p.total_videos)}</strong><small>Vídeos</small></div>
+    </div>`;
+
+  const t = d.top;
+  if (t) {
+    $("top").innerHTML = `
+      ${t.thumbnail ? `<img src="${esc(t.thumbnail)}" alt="">` : `<div></div>`}
+      <div>
+        <div class="label">Mais viral</div>
+        <h3>${esc(t.title) || "Sem título"}</h3>
+        <div class="meta">${fmtDate(t.upload_date)}${t.duration ? ` · ${t.duration}s` : ""}</div>
+        <div class="metrics">
+          ${metric("Views", t.views)}
+          ${metric("Curtidas", t.likes)}
+          ${metric("Comentários", t.comments)}
+          ${metric("Saves", t.saves)}
+          ${metric("Compartilhamentos", t.shares)}
+          ${metric("Engajamento", null, pct(t.engagement_rate))}
+        </div>
+        <div style="margin-top:36px"><a href="${esc(t.url)}" target="_blank" rel="noopener">Abrir no TikTok →</a></div>
+      </div>`;
+  } else {
+    $("top").innerHTML = `<div class="meta">Nenhum vídeo público encontrado.</div>`;
+  }
+
+  const tot = d.totals, av = d.averages;
+  $("totals").innerHTML = [
+    ["Views", tot.views, av.views],
+    ["Curtidas", tot.likes, av.likes],
+    ["Comentários", tot.comments, av.comments],
+    ["Saves", tot.saves, av.saves],
+    ["Compartilhamentos", tot.shares, av.shares],
+  ].map(([l, total, avg]) => `
+    <div class="metric ${total ? "" : "na"}">
+      <label>${l} · total</label>
+      <strong>${fmt(total)}</strong>
+      <div style="color:var(--muted);font-size:13px;margin-top:10px">média ${fmt(avg)}</div>
+    </div>`).join("");
+
+  const maxViews = Math.max(1, ...d.videos.map(v => v.views || 0));
+  $("rows").innerHTML = d.videos.map(v => `
+    <tr>
+      <td style="width:60px">${v.thumbnail ? `<img class="thumb" src="${esc(v.thumbnail)}" alt="" loading="lazy">` : ""}</td>
+      <td>
+        <div class="vtitle">${esc(v.title).slice(0, 110) || "—"}</div>
+        <div class="bar" style="width:${((v.views || 0) / maxViews * 100).toFixed(1)}%"></div>
+      </td>
+      <td class="num">${fmt(v.views)}</td>
+      <td class="num">${fmt(v.likes)}</td>
+      <td class="num hide-sm">${fmt(v.comments)}</td>
+      <td class="num hide-sm">${fmt(v.saves)}</td>
+      <td class="num hide-sm">${fmt(v.shares)}</td>
+      <td class="num">${pct(v.engagement_rate)}</td>
+    </tr>`).join("");
+
+  $("results").classList.add("on");
+}
+
+function metric(label, value, display) {
+  const empty = value == null && display == null;
+  return `<div class="metric ${empty ? "na" : ""}">
+    <label>${label}</label>
+    <strong>${display ?? fmt(value)}</strong>
+  </div>`;
+}
+
+$("go").addEventListener("click", analyze);
+$("url").addEventListener("keydown", e => e.key === "Enter" && analyze());
+</script>
+</body>
+</html>
